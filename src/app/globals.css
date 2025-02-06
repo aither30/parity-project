@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-custom {
+  background-image: url("/public/parity.jpg");
+  background-size: cover;
+  background-position: center;
+}
