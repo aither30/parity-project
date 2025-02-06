@@ -2,7 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import MapComponent from "./components/MapComponent";
+import dynamic from "next/dynamic";
+
+const MapComponent = dynamic(() => import("./MapComponent"), {
+  ssr: false, 
+});
+
 import { FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 
 export default function Page() {
