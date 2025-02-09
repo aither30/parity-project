@@ -2,17 +2,17 @@
 
 import React from "react";
 import Image from "next/image";
-import MapComponent from "./MapComponent";
+// import MapComponent from "./MapComponent";
 import ReactPlayer from "react-player";
 import { useEffect, useRef, useState } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { motion, useInView } from "framer-motion";
 
-// import dynamic from "next/dynamic";
+import dynamic from "next/dynamic";
 
-// const MapComponent = dynamic(() => import("./MapComponent"), {
-//   ssr: false,
-// });
+const MapComponent = dynamic(() => import("./MapComponent"), {
+  ssr: false,
+});
 
 import { FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 
