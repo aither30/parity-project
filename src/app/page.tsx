@@ -466,7 +466,8 @@ export default function Page() {
               href=""
               className="text-lg font-semibold text-white text-center px-6"
             >
-              Purchase
+             Buying and
+             helping farmers
             </a>
           </div>
 
@@ -476,7 +477,9 @@ export default function Page() {
               href=""
               className="text-lg font-semibold text-white text-center px-6"
             >
-              Join Us in Building a Brighter Future
+              Join us in building a
+brighter and more
+prosperous future.
             </a>
           </div>
         </div>
