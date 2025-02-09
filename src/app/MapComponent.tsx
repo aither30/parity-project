@@ -1,21 +1,21 @@
-"use client"; // Tambahkan ini di atas
+"use client";
 
 import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { LatLngTuple } from "leaflet"; // Import tipe LatLngTuple
+import { LatLngTuple } from "leaflet";
 
-// Kustomisasi ikon marker
 const customIcon = new L.Icon({
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
 });
 
-// Definisikan lokasi dengan tipe eksplisit
 const locations: { name: string; position: LatLngTuple }[] = [
+  { name: "Pemalang", position: [-6.89, 109.38] },
   { name: "Lampung", position: [-5.45, 105.26] },
   { name: "Banten", position: [-6.11, 106.15] },
   { name: "Kalimantan Timur", position: [0.5, 117.15] },
@@ -31,7 +31,11 @@ const MapComponent = () => {
   return (
     <div className="relative w-full">
       <div className="aspect-[16/9] md:aspect-[21/9]">
-        <MapContainer center={[-2.5489, 118.0149]} zoom={5} className="w-full h-full">
+        <MapContainer
+          center={[-2.5489, 118.0149]}
+          zoom={5}
+          className="w-full h-full"
+        >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

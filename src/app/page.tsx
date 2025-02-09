@@ -2,15 +2,57 @@
 
 import React from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
+import MapComponent from "./MapComponent";
+import ReactPlayer from "react-player";
+import { useEffect, useRef, useState } from "react";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { motion, useInView } from "framer-motion";
 
-const MapComponent = dynamic(() => import("./MapComponent"), {
-  ssr: false, 
-});
+// import dynamic from "next/dynamic";
+
+// const MapComponent = dynamic(() => import("./MapComponent"), {
+//   ssr: false,
+// });
 
 import { FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 
 export default function Page() {
+    // Ref untuk mendeteksi apakah elemen terlihat
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true }); // ✅ Pastikan pakai useInView() dengan benar
+  
+    // State untuk angka animasi
+    const [farmers, setFarmers] = useState(0);
+    const [production, setProduction] = useState(0);
+  
+    // Efek animasi angka saat masuk layar
+    useEffect(() => {
+      if (isInView) {
+        const farmersInterval = setInterval(() => {
+          setFarmers((prev) => (prev < 100 ? prev + 1 : 100));
+        }, 20);
+  
+        const productionInterval = setInterval(() => {
+          setProduction((prev) => (prev < 500 ? prev + 5 : 500));
+        }, 10);
+  
+        return () => {
+          clearInterval(farmersInterval);
+          clearInterval(productionInterval);
+        };
+      }
+    }, [isInView]);
+  
+
+  const playerRef = useRef<ReactPlayer | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlayPause = () => {
+    if (playerRef.current) {
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   return (
     <div className="min-h-screen w-screen bg-gray-100 text-gray-900">
       {/* Hero Section */}
@@ -43,24 +85,67 @@ export default function Page() {
         </div>
       </div>
       {/* About Us Section */}
-      <section className="max-w-5xl mx-auto md:mt-12 mt-6 px-8 ">
+      <section className="max-w-5xl mx-auto md:mt-12 mt-6">
         <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
           About Us
         </h2>
-        <p className="text-md md:text-xl">
-          PARITY was born from a smallholder farmer who believes that farmers
-          are the main pillar of food security and economic growth. We were born
-          out of a passion to bring real change to Indonesian farmers.
-        </p>
-        <p className="md:mt-4 mt-2 text-md md:text-xl">
-          With this we move together by collecting products from small farmers
-          in various regions, uniting their crops into large-scale products that
-          are ready to meet the needs of the industry, both domestically and
-          internationally.
-        </p>
+        <div className="flex flex-col gap-6 ">
+          <div className="flex gap-4 p-6 bg-gray-300 border rounded-xl">
+            <div className="w-2/3 ">
+              <p className="text-md md:text-xl">
+                PARITY was born from a smallholder farmer who believes that
+                farmers are the main pillar of food security and economic
+                growth. We were born out of a passion to bring real change to
+                Indonesian farmers.
+              </p>
+              <p className="md:mt-4 mt-2 text-md md:text-xl">
+                With this we move together by collecting products from small
+                farmers in various regions, uniting their crops into large-scale
+                products that are ready to meet the needs of the industry, both
+                domestically and internationally.
+              </p>
+            </div>
+            <div className="w-1/3">
+              <Image
+                src="/header.jpeg"
+                alt="header"
+                width={256}
+                height={256}
+                className="w-64 h-64 rounded-lg object-cover"
+              />
+            </div>
+          </div>
+          <motion.div ref={ref} className="flex text-white gap-6 px-6">
+      {/* Box 1 */}
+      <motion.div
+        className="w-1/2 bg-blue-950 h-40 rounded-xl flex justify-center items-center flex-col"
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.h3 className="text-4xl font-bold">
+          {farmers}+
+        </motion.h3>
+        <p className="text-xl">Farmers</p>
+      </motion.div>
+
+      {/* Box 2 */}
+      <motion.div
+        className="w-1/2 bg-blue-400 h-40 rounded-xl flex justify-center items-center flex-col"
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.h3 className="text-4xl font-bold">
+          {production} tons
+        </motion.h3>
+        <p className="text-xl">Production per month</p>
+      </motion.div>
+    </motion.div>
+        </div>
       </section>
       {/* Our Mision Section */}
-      <section className="max-w-5xl mx-auto md:mt-16 mt-6 px-8">
+      <section className="max-w-5xl mx-auto md:mt-12 mt-6 p-6  bg-gray-300 rounded-xl">
         <h2 className="md:text-3xl text-lg font-bold md:mb-4 mb-2">
           Our Mision:
         </h2>
@@ -72,56 +157,53 @@ export default function Page() {
         </p>
       </section>
       {/* Our Products */}
-      <section className="max-w-5xl mx-auto py-6 px-8">
+      <section className="flex flex-col max-w-5xl mx-auto py-6 px-8 ">
         <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
           Our Products
         </h2>
-        <div className="flex md:flex-row flex-col items-center gap-6 p-6 rounded-lg w-full">
-          <div className="text-center">
-            {/* Gambar */}
-            <Image
-              src="/woodcharcoal.png"
-              alt="wood charcoal"
-              width={256}
-              height={256}
-              className="w-64 h-64 rounded-lg object-cover"
-            />
-            <p className="text-xl md:text-2xl font-bold mt-2">wood charcoal</p>
+        <div className="flex ">
+          <div className="flex  items-center justify-center gap-6 p-6 rounded-lg w-full ">
+            <div className="text-center bg-gray-300 p-4 h-96 rounded-xl">
+              <Image
+                src="/hardwoodcharcoal.png"
+                alt="Hardwood charcoal"
+                width={256}
+                height={256}
+                className="w-64 h-64 rounded-lg object-cover"
+              />
+              <p className="text-xl md:text-2xl font-bold mt-2">
+                Hardwood charcoal
+              </p>
+            </div>
           </div>
-          {/* List Informasi */}
-          <ul className="space-y-2 md:text-xl text-md list-disc ml-6">
-            <li>Wood Type: Hardwood</li>
-            <li>Fixed Carbon: 75 - 80%</li>
-            <li>Moisture Content: &lt; 5%</li>
-            <li>Ash Content: 1 - 3%</li>
-            <li>Calorific Value: 7.000 – 8.500 kcal/kg</li>
-            <li>Burning Duration: 3 - 5 Hours</li>
-          </ul>
-        </div>
-        <div className="flex md:flex-row flex-col items-center gap-6 p-6  rounded-lg w-full">
-          <div className="text-center ">
-            {/* Gambar */}
-            <Image
-              src="/coconutshellcharcoal.png"
-              alt="coconut shell charcoal"
-              width={256}
-              height={256}
-              className="w-64 h-64 rounded-lg object-cover"
-            />
-            <p className="text-xl md:text-2xl font-bold mt-2">
-              coconut shell charcoal
-            </p>
+          <div className="flex flex-col justify-center items-center gap-6 p-6  rounded-lg w-full ">
+            <div className="text-center bg-gray-300 p-4 h-96 rounded-xl">
+              <Image
+                src="/coconutshellcharcoal.png"
+                alt="coconut shell charcoal"
+                width={256}
+                height={256}
+                className="w-64 h-64 rounded-lg object-cover"
+              />
+              <p className="text-xl md:text-2xl font-bold mt-2">
+                coconut shell charcoal
+              </p>
+            </div>
           </div>
-
-          {/* List Informasi */}
-          <ul className="space-y-2 md:text-xl text-md list-disc ml-6">
-            <li>Wood Type: Hardwood</li>
-            <li>Fixed Carbon: 75 - 80%</li>
-            <li>Moisture Content: &lt; 5%</li>
-            <li>Ash Content: 1 - 3%</li>
-            <li>Calorific Value: 7.000 – 8.500 kcal/kg</li>
-            <li>Burning Duration: 3 - 5 Hours</li>
-          </ul>
+          <div className="flex  flex-col items-center gap-6 p-6 justify-center  rounded-lg w-full ">
+            <div className="text-center bg-gray-300 p-4 h-96 rounded-xl">
+              <Image
+                src="/halabanwoodcharcoal.png"
+                alt="Halabanwood charcoal"
+                width={256}
+                height={256}
+                className="w-64 h-64 rounded-lg object-cover"
+              />
+              <p className="text-xl md:text-2xl font-bold mt-2">
+                Halabanwood charcoal
+              </p>
+            </div>
+          </div>
         </div>
       </section>
       {/* Place of Production Section */}
@@ -131,7 +213,6 @@ export default function Page() {
         </h2>
         <MapComponent />
       </section>
-
       <section className="max-w-5xl mx-auto py-6 md:PY-12 px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex flex-col items-center gap-6 p-0 md:p-6 ">
           <div className="flex flex-col items-center text-center">
@@ -149,7 +230,7 @@ export default function Page() {
           </div>
           <div className="flex flex-col items-center text-center">
             <Image
-              src="/2.jpeg"
+              src="/3.jpeg"
               alt="Unloading of combustion products"
               width={256}
               height={192}
@@ -164,7 +245,7 @@ export default function Page() {
         <div className="flex flex-col items-center gap-6 p-0 md:p-6 ">
           <div className="flex flex-col items-center text-center">
             <Image
-              src="/3.jpeg"
+              src="/2.jpeg"
               alt="Preparation for combustion"
               width={256}
               height={192}
@@ -188,28 +269,71 @@ export default function Page() {
           </div>
         </div>
       </section>
+      {/* Section Mini Virtual Tour*/}
+      <section className="max-w-5xl mx-auto py-6 md:PY-12 px-8">
+        <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
+          Mini Virtual Tour
+        </h2>
+        <div className="flex gap-6">
+          <div className="relative w-full max-w-2xl mx-auto group">
+            <ReactPlayer
+              ref={playerRef}
+              url="/minitour.mp4"
+              playing={isPlaying}
+              controls={false}
+              width="100%"
+              height="auto"
+            />
 
+            <button
+              onClick={togglePlayPause}
+              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+            >
+              {isPlaying ? (
+                <FaPause size={64} color="white" />
+              ) : (
+                <FaPlay size={64} color="white" />
+              )}
+            </button>
+          </div>
+          <div className="flex flex-col gap-6 text-xl">
+            <p>Welcome to our Mini Virtual Tour!</p>
+            <p>
+              In this short tour, you will be invited to see the process of
+              burning high-quality wood charcoal directly using 5 ovens, besides
+              that you will see raw hardwood products before burning and also
+              the results of burning into wood charcoal products.
+            </p>
+            <p>
+              It&apos;s a unique experience to see how simple technology
+              combines with local wisdom to produce the highest quality
+              environmentally friendly charcoal
+            </p>
+          </div>
+        </div>
+      </section>
       <section className="max-w-5xl mx-auto py-6 md:PY-12 px-8">
         <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
           Our solutions for business clients
         </h2>
         <div className="flex flex-wrap justify-center items-center gap-6 w-full">
           {/* Kotak pertama sampai ketiga (Baris pertama) */}
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-white rounded-lg w-full md:w-1/4">
-            <h2 className="text-xl md:text-2xl font-bold">Shipping</h2>
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4 ">
+            <h2 className="text-xl md:text-2xl font-bold">Good Quality</h2>
             <p className="text-md md:text-lg text-gray-600">
-              PARITY assists in shipping to the client&apos;s place by land or
-              sea.
+              Through proper wood selection, optimal oven firing system, and
+              good storage and packaging.
             </p>
           </div>
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-white  rounded-lg w-full md:w-1/4">
+
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300  rounded-lg w-full md:w-1/4">
             <h2 className="text-xl md:text-2xl font-bold">Meet the Needs</h2>
             <p className="text-md md:text-lg text-gray-600">
               PARITY provides charcoal based on client requests, such as size,
               dryness, and so on.
             </p>
           </div>
-          <div className="flex flex-col items-center  justify-center gap-4 p-6 bg-white rounded-lg w-full md:w-1/4">
+          <div className="flex flex-col items-center  justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4">
             <h2 className="text-xl md:text-2xl font-bold text-center">
               Large Scale Production
             </h2>
@@ -217,15 +341,15 @@ export default function Page() {
               PARITY produces up to 400 tons of charcoal per month.
             </p>
           </div>
-
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-white rounded-lg w-full md:w-1/4 ">
-            <h2 className="text-xl md:text-2xl font-bold">Good Quality</h2>
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4">
+            <h2 className="text-xl md:text-2xl font-bold">Shipping</h2>
             <p className="text-md md:text-lg text-gray-600">
-              Through proper wood selection, optimal oven firing system, and
-              good storage and packaging.
+              PARITY assists in shipping to the client&apos;s place by land or
+              sea.
             </p>
           </div>
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-white rounded-lg w-full md:w-1/4 ">
+
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4 ">
             <h2 className="text-xl md:text-2xl font-bold">Additional</h2>
             <p className="text-md md:text-lg text-gray-600">
               Other extras include flexibility, competitive pricing, and
@@ -234,38 +358,30 @@ export default function Page() {
           </div>
         </div>
       </section>
-
       <section className="max-w-5xl mx-auto py-6 md:PY-12 px-8 w-full">
         {/* Judul News Section */}
         <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">News</h2>
         {/* Grid for News */}
         <div className="grid md:grid-cols-2 gap-8">
           {/* Industry News */}
-          <div className="bg-white p-6 rounded-lg ">
+          <div className="bg-gray-300 p-6 rounded-lg ">
             <Image
-              src="/news1.jpeg"
+              src="/news1.png"
               alt="Charcoal demand trends in the global market"
               width={400}
               height={250}
-              className="rounded-lg"
+              className="rounded-lg object-cover h-64"
             />
-            <p className="text-gray-500 text-sm mt-4">March 10, 2025</p>
-            <span className="text-sm font-semibold text-blue-600">
-              Industry News
-            </span>
             <h3 className="text-2xl font-semibold mt-2">
-              Charcoal Demand Trends in the Global Market
+              Indonesia Hardwood for Lump Charcoal
             </h3>
-            <ul className="text-gray-600 mt-2 list-disc list-inside">
-              <li>Global demand for charcoal continues to rise.</li>
-              <li>
-                The benefits of coconut shell charcoal in the culinary & health
-                industries.
-              </li>
-              <li>New regulations on charcoal exports abroad.</li>
-            </ul>
+            <p className="text-gray-600 mt-2">
+              Indonesian hardwood charcoal is known for its premium quality-high
+              heat, long burn duration, and low residue. The best choice for
+              global export needs! - Sep 27, 2023
+            </p>
             <a
-              href="#"
+              href="https://www.cocologi.com/post/indonesiahardwood-for-lump-charcoa"
               className="inline-block mt-4 text-blue-600 font-medium hover:underline"
             >
               Read More →
@@ -273,30 +389,30 @@ export default function Page() {
           </div>
 
           {/* Education & Tips */}
-          <div className="bg-white p-6 rounded-lg ">
+          <div className="bg-gray-300 p-6 rounded-lg ">
             <Image
-              src="/news2.jpeg"
+              src="/news2.jpg"
               alt="How to choose the right charcoal"
               width={400}
               height={250}
-              className="rounded-lg"
+              className="rounded-lg object-cover h-64"
             />
-            <p className="text-gray-500 text-sm mt-4">March 8, 2025</p>
-            <span className="text-sm font-semibold text-blue-600">
-              Education & Tips
-            </span>
+
             <h3 className="text-2xl font-semibold mt-2">
-              How to Choose & Store Charcoal Properly
+              The Story of the Surviving Charcoal Makers in Pemalang
             </h3>
-            <ul className="text-gray-600 mt-2 list-disc list-inside">
-              <li>How to choose the right charcoal for specific needs.</li>
-              <li>
-                Tips for storing charcoal to keep it dry and high quality.
-              </li>
-              <li>The benefits of charcoal for health and agriculture.</li>
-            </ul>
+            <p className="text-gray-600 mt-2">
+              The story of the wood charcoal makers in Pemalang tells of the
+              struggle of the artisans to survive amidst the challenges of the
+              times. Although the demand for wood charcoal is still there, they
+              have to face hard work, low sales, and changing lifestyles. This
+              tradition lives on thanks to the perseverance and expertise passed
+              down from generation to generation. - Aug 10, 2024
+            </p>
             <a
-              href="#"
+              href="https://timesindonesia.co.id/ekonomi/50567
+6/kisah-pembuat-arang-kayu-di-pemalangyang-masih-bertahan
+"
               className="inline-block mt-4 text-blue-600 font-medium hover:underline"
             >
               Read More →
@@ -304,9 +420,8 @@ export default function Page() {
           </div>
         </div>
       </section>
-
       <section className="max-w-5xl mx-auto py-6 md:py-12 px-8 w-full">
-        <div className="w-full bg-white text-black p-12 flex flex-col rounded-lg">
+        <div className="w-full bg-gray-300 text-black p-12 flex flex-col rounded-lg">
           <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
             Get in touch with PARITY
           </h2>
@@ -366,78 +481,77 @@ export default function Page() {
           </div>
         </div>
       </section>
+      <footer className="bg-black text-white py-6 md:py-12 text-center">
+        <div className="max-w-5xl mx-auto px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* About Us */}
+            <div>
+              <h3 className="font-semibold text-xl mb-4">About Us</h3>
+              <p className="text-gray-300 leading-relaxed">
+                PARITY was born from a smallholder farmer who believes that
+                farmers are the main pillar of food security and economic
+                growth. We were born out of a passion to bring real change to
+                Indonesian farmers.
+              </p>
+            </div>
 
-      <footer className="bg-gray-800 text-white py-6 md:py-12 text-center">
-      <div className="max-w-5xl mx-auto px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* About Us */}
-          <div>
-            <h3 className="font-semibold text-xl mb-4">About Us</h3>
-            <p className="text-gray-300 leading-relaxed">
-              PARITY was born from a smallholder farmer who believes that
-              farmers are the main pillar of food security and economic growth.
-              We were born out of a passion to bring real change to Indonesian
-              farmers.
+            {/* Contact Info */}
+            <div>
+              <h3 className="font-semibold text-xl mb-4">Contact Info</h3>
+              <div className="flex flex-col gap-3 text-gray-300">
+                <a
+                  href="https://wa.me/6281243953947"
+                  className="flex items-center gap-2 hover:text-green-400"
+                >
+                  <FaWhatsapp className="text-green-500 text-xl" />
+                  +62 812-4395-3947
+                </a>
+                <a
+                  href="https://www.facebook.com/ParityMultinational"
+                  className="flex items-center gap-2 hover:text-blue-400"
+                >
+                  <FaFacebook className="text-blue-700 text-xl" />
+                  Parity Multinational
+                </a>
+                <a
+                  href="https://www.instagram.com/parityy_"
+                  className="flex items-center gap-2 hover:text-pink-400"
+                >
+                  <FaInstagram className="text-pink-500 text-xl" />
+                  @parityy_
+                </a>
+              </div>
+            </div>
+
+            {/* Follow Us */}
+            <div>
+              <h3 className="font-semibold text-xl mb-4">Follow Us</h3>
+              <div className="flex justify-center gap-6 text-2xl">
+                <a
+                  href="https://www.facebook.com/ParityMultinational"
+                  className="text-blue-700 hover:text-blue-400 transition-colors"
+                >
+                  <FaFacebook />
+                </a>
+                <a
+                  href="https://www.instagram.com/parityy_"
+                  className="text-pink-500 hover:text-pink-400 transition-colors"
+                >
+                  <FaInstagram />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright Section */}
+          <div className="mt-8 text-sm text-gray-400">
+            <p>
+              &copy; {new Date().getFullYear()} PT Parity Multinational, All
+              rights reserved.
             </p>
           </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="font-semibold text-xl mb-4">Contact Info</h3>
-            <div className="flex flex-col gap-3 text-gray-300">
-              <a
-                href="https://wa.me/6281243953947"
-                className="flex items-center gap-2 hover:text-green-400"
-              >
-                <FaWhatsapp className="text-green-500 text-xl" />
-                +62 812-4395-3947
-              </a>
-              <a
-                href="https://www.facebook.com/ParityMultinational"
-                className="flex items-center gap-2 hover:text-blue-400"
-              >
-                <FaFacebook className="text-blue-700 text-xl" />
-                Parity Multinational
-              </a>
-              <a
-                href="https://www.instagram.com/parityy_"
-                className="flex items-center gap-2 hover:text-pink-400"
-              >
-                <FaInstagram className="text-pink-500 text-xl" />
-                @parityy_
-              </a>
-            </div>
-          </div>
-
-          {/* Follow Us */}
-          <div>
-            <h3 className="font-semibold text-xl mb-4">Follow Us</h3>
-            <div className="flex justify-center gap-6 text-2xl">
-              <a
-                href="https://www.facebook.com/ParityMultinational"
-                className="text-blue-700 hover:text-blue-400 transition-colors"
-              >
-                <FaFacebook />
-              </a>
-              <a
-                href="https://www.instagram.com/parityy_"
-                className="text-pink-500 hover:text-pink-400 transition-colors"
-              >
-                <FaInstagram />
-              </a>
-            </div>
-          </div>
         </div>
-
-        {/* Copyright Section */}
-        <div className="mt-8 text-sm text-gray-400">
-          <p>
-            &copy; {new Date().getFullYear()} PT Parity Multinational, All
-            rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
+      </footer>
     </div>
   );
 }
