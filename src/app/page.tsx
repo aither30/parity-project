@@ -17,32 +17,31 @@ const MapComponent = dynamic(() => import("./MapComponent"), {
 import { FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 
 export default function Page() {
-    // Ref untuk mendeteksi apakah elemen terlihat
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true }); // ✅ Pastikan pakai useInView() dengan benar
-  
-    // State untuk angka animasi
-    const [farmers, setFarmers] = useState(0);
-    const [production, setProduction] = useState(0);
-  
-    // Efek animasi angka saat masuk layar
-    useEffect(() => {
-      if (isInView) {
-        const farmersInterval = setInterval(() => {
-          setFarmers((prev) => (prev < 100 ? prev + 1 : 100));
-        }, 20);
-  
-        const productionInterval = setInterval(() => {
-          setProduction((prev) => (prev < 500 ? prev + 5 : 500));
-        }, 10);
-  
-        return () => {
-          clearInterval(farmersInterval);
-          clearInterval(productionInterval);
-        };
-      }
-    }, [isInView]);
-  
+  // Ref untuk mendeteksi apakah elemen terlihat
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true }); // ✅ Pastikan pakai useInView() dengan benar
+
+  // State untuk angka animasi
+  const [farmers, setFarmers] = useState(0);
+  const [production, setProduction] = useState(0);
+
+  // Efek animasi angka saat masuk layar
+  useEffect(() => {
+    if (isInView) {
+      const farmersInterval = setInterval(() => {
+        setFarmers((prev) => (prev < 100 ? prev + 1 : 100));
+      }, 20);
+
+      const productionInterval = setInterval(() => {
+        setProduction((prev) => (prev < 500 ? prev + 5 : 500));
+      }, 10);
+
+      return () => {
+        clearInterval(farmersInterval);
+        clearInterval(productionInterval);
+      };
+    }
+  }, [isInView]);
 
   const playerRef = useRef<ReactPlayer | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -86,12 +85,12 @@ export default function Page() {
       </div>
       {/* About Us Section */}
       <section className="max-w-5xl mx-auto md:mt-12 mt-6">
-        <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
+        <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2 md:ml-0 ml-12">
           About Us
         </h2>
         <div className="flex flex-col gap-6 ">
-          <div className="flex gap-4 p-6 bg-gray-300 border rounded-xl">
-            <div className="w-2/3 ">
+          <div className="flex md:flex-row flex-col-reverse gap-4 p-6 bg-gray-300 border rounded-xl md:mx:0 md:mx-0 mx-6">
+            <div className="md:w-2/3 w-full ">
               <p className="text-md md:text-xl">
                 PARITY was born from a smallholder farmer who believes that
                 farmers are the main pillar of food security and economic
@@ -105,47 +104,49 @@ export default function Page() {
                 domestically and internationally.
               </p>
             </div>
-            <div className="w-1/3">
+            <div className="md:w-1/3 w-full flex justify-center items-center">
               <Image
                 src="/header.jpeg"
                 alt="header"
                 width={256}
                 height={256}
-                className="w-64 h-64 rounded-lg object-cover"
+                className="md:w-64 h-64 w-full rounded-lg object-cover"
               />
             </div>
           </div>
           <motion.div ref={ref} className="flex text-white gap-6 px-6">
-      {/* Box 1 */}
-      <motion.div
-        className="w-1/2 bg-blue-950 h-40 rounded-xl flex justify-center items-center flex-col"
-        initial={{ opacity: 0, y: 50 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8 }}
-      >
-        <motion.h3 className="text-4xl font-bold">
-          {farmers}+
-        </motion.h3>
-        <p className="text-xl">Farmers</p>
-      </motion.div>
+            {/* Box 1 */}
+            <motion.div
+              className="w-1/2 bg-blue-950 h-40 rounded-xl flex justify-center items-center flex-col"
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.h3 className="text-2xl md:text-4xl font-bold">
+                {farmers}+
+              </motion.h3>
+              <p className="text-md md:text-xl">Farmers</p>
+            </motion.div>
 
-      {/* Box 2 */}
-      <motion.div
-        className="w-1/2 bg-blue-400 h-40 rounded-xl flex justify-center items-center flex-col"
-        initial={{ opacity: 0, y: 50 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8 }}
-      >
-        <motion.h3 className="text-4xl font-bold">
-          {production} tons
-        </motion.h3>
-        <p className="text-xl">Production per month</p>
-      </motion.div>
-    </motion.div>
+            {/* Box 2 */}
+            <motion.div
+              className="w-1/2 bg-blue-400 h-40 rounded-xl flex justify-center items-center flex-col"
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.h3 className="text-2xl md:text-4xl font-bold">
+                {production} tons
+              </motion.h3>
+              <p className="text-md md:text-xl text-center">
+                Production per month
+              </p>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
       {/* Our Mision Section */}
-      <section className="max-w-5xl mx-auto md:mt-12 mt-6 p-6  bg-gray-300 rounded-xl">
+      <section className="max-w-5xl md:mx-auto mx-6 md:mt-12 mt-6 p-6  bg-gray-300 rounded-xl ">
         <h2 className="md:text-3xl text-lg font-bold md:mb-4 mb-2">
           Our Mision:
         </h2>
@@ -161,9 +162,9 @@ export default function Page() {
         <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
           Our Products
         </h2>
-        <div className="flex ">
+        <div className="flex md:flex-row flex-col">
           <div className="flex  items-center justify-center gap-6 p-6 rounded-lg w-full ">
-            <div className="text-center bg-gray-300 p-4 h-96 rounded-xl">
+            <div className="text-center bg-gray-300 p-4 h-70 md:h-96 rounded-xl">
               <Image
                 src="/hardwoodcharcoal.png"
                 alt="Hardwood charcoal"
@@ -177,7 +178,7 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-col justify-center items-center gap-6 p-6  rounded-lg w-full ">
-            <div className="text-center bg-gray-300 p-4 h-96 rounded-xl">
+            <div className="text-center bg-gray-300 p-4 h-70 md:h-96 rounded-xl">
               <Image
                 src="/coconutshellcharcoal.png"
                 alt="coconut shell charcoal"
@@ -191,7 +192,7 @@ export default function Page() {
             </div>
           </div>
           <div className="flex  flex-col items-center gap-6 p-6 justify-center  rounded-lg w-full ">
-            <div className="text-center bg-gray-300 p-4 h-96 rounded-xl">
+            <div className="text-center bg-gray-300 p-4 h-70 md:h-96 rounded-xl">
               <Image
                 src="/halabanwoodcharcoal.png"
                 alt="Halabanwood charcoal"
@@ -274,7 +275,7 @@ export default function Page() {
         <h2 className="md:text-5xl text-2xl font-bold md:mb-4 mb-2">
           Mini Virtual Tour
         </h2>
-        <div className="flex gap-6">
+        <div className="flex md:flex-row flex-col gap-6">
           <div className="relative w-full max-w-2xl mx-auto group">
             <ReactPlayer
               ref={playerRef}
@@ -318,7 +319,7 @@ export default function Page() {
         </h2>
         <div className="flex flex-wrap justify-center items-center gap-6 w-full">
           {/* Kotak pertama sampai ketiga (Baris pertama) */}
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4 ">
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:h-52 h-40 md:w-1/4 ">
             <h2 className="text-xl md:text-2xl font-bold">Good Quality</h2>
             <p className="text-md md:text-lg text-gray-600">
               Through proper wood selection, optimal oven firing system, and
@@ -326,14 +327,14 @@ export default function Page() {
             </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300  rounded-lg w-full md:w-1/4">
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300  rounded-lg w-full md:h-52 h-40 md:w-1/4">
             <h2 className="text-xl md:text-2xl font-bold">Meet the Needs</h2>
             <p className="text-md md:text-lg text-gray-600">
               PARITY provides charcoal based on client requests, such as size,
               dryness, and so on.
             </p>
           </div>
-          <div className="flex flex-col items-center  justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4">
+          <div className="flex flex-col items-center  justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4 md:h-52 h-40">
             <h2 className="text-xl md:text-2xl font-bold text-center">
               Large Scale Production
             </h2>
@@ -341,7 +342,7 @@ export default function Page() {
               PARITY produces up to 400 tons of charcoal per month.
             </p>
           </div>
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4">
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4 md:h-52 h-40">
             <h2 className="text-xl md:text-2xl font-bold">Shipping</h2>
             <p className="text-md md:text-lg text-gray-600">
               PARITY assists in shipping to the client&apos;s place by land or
@@ -349,7 +350,7 @@ export default function Page() {
             </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4 ">
+          <div className="flex flex-col items-center justify-center gap-4 p-6 bg-gray-300 rounded-lg w-full md:w-1/4 md:h-52 h-40">
             <h2 className="text-xl md:text-2xl font-bold">Additional</h2>
             <p className="text-md md:text-lg text-gray-600">
               Other extras include flexibility, competitive pricing, and
@@ -381,7 +382,7 @@ export default function Page() {
               global export needs! - Sep 27, 2023
             </p>
             <a
-              href="https://www.cocologi.com/post/indonesiahardwood-for-lump-charcoa"
+              href="https://www.cocologi.com/post/indonesia-hardwood-for-lump-charcoal"
               className="inline-block mt-4 text-blue-600 font-medium hover:underline"
             >
               Read More →
@@ -410,9 +411,7 @@ export default function Page() {
               down from generation to generation. - Aug 10, 2024
             </p>
             <a
-              href="https://timesindonesia.co.id/ekonomi/50567
-6/kisah-pembuat-arang-kayu-di-pemalangyang-masih-bertahan
-"
+              href="https://timesindonesia.co.id/ekonomi/505676/kisah-pembuat-arang-kayu-di-pemalang-yang-masih-bertahan"
               className="inline-block mt-4 text-blue-600 font-medium hover:underline"
             >
               Read More →
@@ -466,8 +465,7 @@ export default function Page() {
               href=""
               className="text-lg font-semibold text-white text-center px-6"
             >
-             Buying and
-             helping farmers
+              Buying and helping farmers
             </a>
           </div>
 
@@ -477,9 +475,7 @@ export default function Page() {
               href=""
               className="text-lg font-semibold text-white text-center px-6"
             >
-              Join us in building a
-brighter and more
-prosperous future.
+              Join us in building a brighter and more prosperous future.
             </a>
           </div>
         </div>
